@@ -1,0 +1,123 @@
+{% include "header.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'poppin/content.css' %}">
+{% block content %}
+	<style>
+	h2 {
+		font-size: 1.2em;
+	}
+  div.tab {
+    float: left;
+/*    border: 1px solid #ccc;
+*/    background-color: black;
+    width: 15%;
+    height: 70%;
+    padding-top: 3.30em;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    display: block;
+    background-color: black;
+    color: #A60dcf;
+    padding-top: 2em;
+    padding-left: 4.2em;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+/*div.tab button:hover{
+    opacity: .50;
+    background: white;   
+}*/
+
+/* Create an active/current "tab button" class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+
+#Profile { 
+  font-size: 1.5em;
+        float: left;
+/*    border: 1px solid #ccc;
+*/    background-color: black;
+    width: 15%;
+    height: 70%;
+    padding-top: 3.2em;
+    padding-left: 10em;
+}
+
+	</style>
+  <p>Click on the buttons inside the tabbed menu:</p>
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'Profile')" id="defaultOpen">Profile</button>
+  <button class="tablinks" onclick="openTab(event, 'Billing')">Billing</button>
+  <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
+</div>
+
+
+    <div id="Profile" class="tabcontent">
+     {% csrf_token %}
+      {% for field in form %}
+      <p>
+        {{ field.label_tag }}
+        {{ field }}
+<!--         {% if field.help_text %}
+          <small style="color: grey">{{ field.help_text }}</small>
+        {% endif %} -->
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    </div>
+
+<div id="Billing" class="tabcontent">
+   <ul>
+      <li><h2>Address:&nbsp;&nbsp; <label class="labelcontent"><span>{{dictionary.address}}</span></h2></li>
+      <li><h2>Card Company:&nbsp;&nbsp; <span>{{dictionary.cardcompany}}</span></h2></li>
+      <li><h2>Account Number:&nbsp;&nbsp; <span>{{dictionary.accountnumber}}</span></h2></li>
+    </ul>
+</div>
+
+<div id="Settings" class="tabcontent">
+  <ul>
+    <h1><a href="">Change Password</a></h1>
+  </ul>
+</div>
+
+<script>
+var choice;
+// function showProfile() {
+//   openTab(event, 'Profile')
+//   choice = 1;
+// }
+function openTab(evt, tablename) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tablename).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+
+</script>
+{% endblock %}
+{% include "footer.html" %}

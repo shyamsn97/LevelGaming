@@ -1,0 +1,84 @@
+
+    {% load static %}
+      <head>
+        <style>
+        header {
+          position: fixed;
+          width: 100%;
+/*          margin-bottom: 120px;*/
+        }
+        </style>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Livemap</title>
+
+        <link rel="stylesheet" href="{% static 'poppin/demo.css' %}">
+        <link rel="stylesheet" href="{% static 'poppin/header-user-dropdown.css' %}">
+        <!-- <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'> -->
+
+
+      </head>
+<body>
+<header class="header-user-dropdown">
+  <div class="header-limiter">
+    <h1><a href="/">Live<span>map</span></a></h1>
+
+    <nav>
+      <a href="">Advertise</a>
+      <a href="{% url 'login' %}">Login/Signup</a>
+<!--       <a href="#">Notifications<span class="header-new-feature">new</span></a>
+ -->    </nav>
+
+    {% if user.is_authenticated %}
+     <label>{{ user.email}} </label> 
+     
+    <div class="header-user-menu">
+         
+      <ul>
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="#">Settings</a></li>
+        <li><a href="{% url 'logout' %}" class="highlight">Logout</a></li>
+        {% else %}
+        <li><a href="" class="highlight">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    {% else %}
+    <label>Welcome, guest</label>
+    {% endif %}
+
+  </div>
+
+</header>
+<!-- 
+    <div class="nav">
+    	<div class="nav-item">
+    		<a href="/"><img width="40px" height="40px" src="<img src="{{ MEDIA_URL }}roundlogo.png"></a>
+    	</div>
+    	<div class="nav-item">
+        	<a href="/"><h1>Home</h1></a>
+      	</div>
+      	<div class="nav-item">
+      		<a href=""><h1>Advertise</h1></a>
+    	</div>
+      <div class="nav-item">
+    
+      <a onClick="myFunction(); return false;" href=""disabled="disabled"><h1>Login</h1></a>
+    
+    		<a href="{% url 'signup' %}"><h1>Sign Up</h1></a>
+    	</div>
+    	<div class="nav-item">
+      		<a href="{% url 'signup' %}"><h1>Login</h1></a>
+    	</div>
+    	<div class="nav-item " >
+    			{% if user.is_authenticated %}
+        	<h1> User : {{ user.email}} </h1> 
+    			{% else %}
+    			{% endif %}
+		</div>
+    </div> -->
+</body>
+</div>

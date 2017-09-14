@@ -1,0 +1,39 @@
+
+
+   body{
+        color:#ffffff;
+      }
+    form { 
+      /*margin-top: 120px;*/
+      padding-top: 80px;
+      margin: 0 auto; 
+      width:350px;
+    }
+    ul {
+      list-style-type: none;
+      color: white;
+      text-align: left;
+      padding-top: 6em;
+      padding-left: 31em; 
+      width:350px;
+    }
+    h2{
+      text-align: left;
+    }
+    input {
+      width: 100%;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+        button {
+    background-color: #fff;
+    color:black;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+    padding: 1px 12px;
+    }
+
+    button:hover {
+    background-color: #A828A8; 
+    color: white;
+    }

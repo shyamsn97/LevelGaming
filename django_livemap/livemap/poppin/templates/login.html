@@ -1,0 +1,31 @@
+{% include "header.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'poppin/content.css' %}">
+{% block content %}
+<!-- {% if form.errors %}
+    {{ form.errors }} display the form errors if they exist
+{% endif %} -->
+  <form method="post">
+  {% if user.is_authenticated %}
+  <h2>Log out before logging into another account</h2>
+  {% else %}
+  <h2>Login</h2>
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+          <small style="color: grey">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    <button type="submit">Log in</button>
+    <a href="{% url 'signup' %}">Don't have an account? Sign up here</a>
+  {% endif %}
+  </form>
+{% endblock %}
+{% include "footer.html" %}
