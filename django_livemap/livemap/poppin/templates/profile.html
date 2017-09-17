@@ -45,12 +45,12 @@ div.tab button.active {
 
 #Profile { 
   font-size: 1.5em;
-        float: left;
+    float: left;
 /*    border: 1px solid #ccc;
-*/    background-color: black;
+*/  background-color: black;
     width: 15%;
     height: 70%;
-    padding-top: 3.2em;
+    padding-top: 0em;
     padding-left: 10em;
 }
 
@@ -65,7 +65,8 @@ div.tab button.active {
 
 
     <div id="Profile" class="tabcontent">
-     {% csrf_token %}
+     <form method="post">
+      {% csrf_token %}
       {% for field in form %}
       <p>
         {{ field.label_tag }}
@@ -78,6 +79,8 @@ div.tab button.active {
         {% endfor %}
       </p>
     {% endfor %}
+    <button type="submit">Save Changes</button>
+    </form>
     </div>
 
 <div id="Billing" class="tabcontent">

@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import json
 # from django.contrib.auth import logout as django_logout
 from django.shortcuts import render, redirect
-
+from poppin.models import myUser
 from .forms import SignUpForm, LoginForm, ProfileForm
 
 # Create your views here.
@@ -21,19 +21,28 @@ def editprofile(request):
     choice = 1
     dictionary = json.loads(request.user.content)
     if request.method == 'POST':
-        editprofileform = ProfileForm(request.POST or None, initial={'first_names': request.user.first_name, 
-            'last_names': request.user.last_name, 'busyname': disctionary["businessname"]})
-        saveprofile = editprofileform.save(commit=False)
-        dictionary["businessname"] = form.cleaned_data.get('busyname')
-        saveprofile.content = json.dumps(dictionary)
-        saveform.first_name = form.cleaned_data.get('firstname')
-        saveform.last_name = form.cleaned_data.get('lastname')
-        saveform.save()
-        return redirect('profile')
+        editprofileform = ProfileForm(data=request.POST, instance=request.user, initial={'first_names': dictionary["firstname"], 
+            'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
+        if editprofileform.is_valid():
+
+            # newsaveform = SignUpForm(request.POST, initial = {'first_name': request.user.first_name, 
+            # 'last_name': request.user.last_name, 'address': dictionary["address"], 'cardcompany': dictionary["cardcompany"],
+            # 'accountnumber': dictionary["accountnumber"]})
+            saveuser = editprofileform.save(commit=False)
+            # saveprofile = myUser.objects.get(username = request.user.username)
+            # saveprofileform = ProfileForm(request.POST, instance=request.user)
+            dictionary["businessname"] = editprofileform.cleaned_data.get('busyname')
+            dictionary["firstname"] = editprofileform.cleaned_data.get('first_names')
+            dictionary["lastname"] = editprofileform.cleaned_data.get('last_names')
+            saveuser.content = json.dumps(dictionary)
+            # saveuser.first_name = editprofileform.cleaned_data.get('firstname')
+            # saveuser.last_name = editprofileform.cleaned_data.get('lastname')
+            saveuser.save()
+            return redirect('profile')
     else:
-        editsaveform = ProfileForm(request.POST or None, initial={'first_names': request.user.first_name, 
-            'last_names': request.user.last_name, 'busyname': dictionary["businessname"]})
-    return render(request, 'profile.html', {'form': editsaveform, 'choice': choice})
+        editprofileform = ProfileForm(request.POST or None, instance=request.user, initial={'first_names': dictionary["firstname"], 
+            'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
+    return render(request, 'profile.html', {'form': editprofileform, 'choice': choice, 'dictionary': dictionary})
 
 
 def showprofile(request):
