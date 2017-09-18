@@ -43,7 +43,7 @@ div.tab button.active {
 }
 
 
-#Profile { 
+#Profile, #Locations { 
   font-size: 1.5em;
     float: left;
 /*    border: 1px solid #ccc;
@@ -59,7 +59,7 @@ div.tab button.active {
 
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'Profile')" id="defaultOpen">Profile</button>
-  <button class="tablinks" onclick="openTab(event, 'Billing')">Billing</button>
+  <button class="tablinks" onclick="openTab(event, 'Locations')">Locations</button>
   <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
 </div>
 
@@ -67,7 +67,7 @@ div.tab button.active {
     <div id="Profile" class="tabcontent">
      <form method="post">
       {% csrf_token %}
-      {% for field in form %}
+      {% for field in profileform %}
       <p>
         {{ field.label_tag }}
         {{ field }}
@@ -83,12 +83,23 @@ div.tab button.active {
     </form>
     </div>
 
-<div id="Billing" class="tabcontent">
-   <ul>
-      <li><h2>Address:&nbsp;&nbsp; <label class="labelcontent"><span>{{dictionary.address}}</span></h2></li>
-      <li><h2>Card Company:&nbsp;&nbsp; <span>{{dictionary.cardcompany}}</span></h2></li>
-      <li><h2>Account Number:&nbsp;&nbsp; <span>{{dictionary.accountnumber}}</span></h2></li>
-    </ul>
+<div id="Locations" class="tabcontent">
+     <form method="post">
+      {% csrf_token %}
+      {% for field in locationform %}
+      <p>
+        {{ field.label_tag }}
+        {{ field }}
+<!--         {% if field.help_text %}
+          <small style="color: grey">{{ field.help_text }}</small>
+        {% endif %} -->
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    <button type="submit">Save Changes</button>
+    </form>
 </div>
 
 <div id="Settings" class="tabcontent">

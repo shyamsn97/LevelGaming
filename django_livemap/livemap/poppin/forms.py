@@ -7,6 +7,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
 import json
 
+
+
 class ProfileForm(ModelForm):
     first_names = forms.CharField(max_length=254, label="First Name")
     last_names = forms.CharField(max_length=254, label="Last Name")
@@ -26,6 +28,24 @@ class ProfileForm(ModelForm):
         model = User
         fields = ('first_names','last_names','busyname',)
 
+class LocationForm(ModelForm):
+    address = forms.CharField(max_length=254)
+    opentime = forms.TimeField(input_formats='%H:%M',label="Open Time")
+    closetime = forms.TimeField(input_formats='%H:%M',label="Close Time")
+
+    # def save(self, request):
+    #     newuser = request.user
+    #     data = self.cleaned_data
+    #     diction = json.loads(request.user.content)
+    #     diction['businessname'] = data['busyname']
+    #     user = User(email=newuser.email,first_name=data['first_names'],
+    #     last_name=data['last_names'],content=diction)
+    #     user.update()
+    #     return user
+
+    class Meta:
+        model = User
+        fields = ('address','opentime','closetime',)
 
 class LoginForm(forms.Form):
     email = forms.EmailField(max_length=255, required=True)
@@ -45,6 +65,8 @@ class LoginForm(forms.Form):
         user = authenticate(email=email, password=password)
         return user
 
+
+
 class SignUpForm(UserCreationForm):
     # first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
     # last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
@@ -52,12 +74,13 @@ class SignUpForm(UserCreationForm):
     lastname = forms.CharField(max_length=254, label="Last Name")
     businessname = forms.CharField(max_length=254, label="Business Name")
     address = forms.CharField(max_length=254)
-    cardcompany = forms.CharField(max_length=254, label="Card Company")
-    accountnumber = forms.CharField(max_length=254, label="Account Number")
+    opentime = forms.DateTimeField(input_formats=['%H:%M'],label="Open Time")
+    closetime = forms.DateTimeField(input_formats=['%H:%M'],label="Close Time")
+
 
 
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2', 'firstname', 'lastname', 'businessname', 'address', 'cardcompany','accountnumber',)
+        fields = ('email', 'password1', 'password2', 'firstname', 'lastname', 'businessname', 'address', 'opentime','closetime',)
  
