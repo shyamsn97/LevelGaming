@@ -11,7 +11,7 @@
 /*    border: 1px solid #ccc;
 */  background-color: black;
     width: 15%;
-    height: 70%;
+    height: 100%;
     padding-top: 3.30em;
 }
 
@@ -43,12 +43,20 @@ div.tab button.active {
 }
 
 
-#bitch {
+/*#bitch {
     position: relative;
     top: 8em;
     left: -7.4em;
-}
+}*/
 
+#createlocation {
+    cursor: pointer;
+    position: absolute;
+    color: blue;
+    top: 5em;
+    left: 30em;
+    text-decoration: none;
+}
 #show {
     cursor: pointer;
     position: absolute;
@@ -97,7 +105,9 @@ div.tab button.active {
     </form>
     </div>
 
+
 <div id="Locations" class="tabcontent">
+<a id ="createlocation", href="{% url 'makelocation' %}">New Location</a>
 {% for pickform in formarray %}
 <span id = "show", onclick="showLocation(1,1)">{{ dictionary.locations.0.address }}</span>
      <form id = "locationstuff" style="display: none" method="post">

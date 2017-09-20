@@ -28,7 +28,14 @@
 
     <nav>
       <a href="">Advertise</a>
-      <a href="{% url 'login' %}">Login/Signup</a>
+      <a id="loginbutton", href="{% url 'login' %}">Login/Signup</a>
+      {% if user.is_authenticated %}
+      <style>
+        #loginbutton {
+          visibility: hidden;
+        }
+      </style>
+      {% endif %}
 <!--       <a href="#">Notifications<span class="header-new-feature">new</span></a>
  -->    </nav>
 

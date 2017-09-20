@@ -7,7 +7,7 @@
 {% endif %} -->
   <form method="post">
   {% if user.is_authenticated %}
-  <h2>Log out before logging into another account</h2>
+  <h2>Logged In!</h2>
   {% else %}
   <h2>Login</h2>
     {% csrf_token %}

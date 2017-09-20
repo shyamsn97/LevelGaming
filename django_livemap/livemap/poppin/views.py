@@ -19,9 +19,9 @@ class HomePageView(TemplateView):
 
 def editprofile(request):
     dictionary = json.loads(request.user.content)
-    editprofileform = ProfileForm(data=request.POST, instance=request.user, initial={'first_names': dictionary["firstname"], 
+    editprofileform = ProfileForm(request.POST, instance=request.user, initial={'first_names': dictionary["firstname"], 
             'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
-    editlocationform = LocationForm(data=request.POST, instance=request.user, initial={'address': dictionary["locations"][0]["address"], 
+    editlocationform = LocationForm(request.POST, instance=request.user, initial={'address': dictionary["locations"][0]["address"], 
             'opentime': dictionary["locations"][0]["opentime"], 'closetime': dictionary["locations"][0]["closetime"]})
     templatelocations = dictionary["locations"]
     count = 0
@@ -94,44 +94,23 @@ def login_view(request):
             login(request, user)
             return redirect('profile')# Redirect to a success page.
     return render(request, 'login.html', {'form': form })
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             user = authenticate(email=email,password=form.cleaned_data.get('password1'))
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = LoginForm()
-#     return render(request, 'login.html', {'form': form})
 
-# def edit_profile(request):
-
-#     if 'edit_button' in request.POST:
-#              form = ProfileForm(request.POST)
-#              f_user = User.objects.get(username=request.user.id)
-#              f_profile_name = form.cleaned_data['profile_name']
-#              p = UserProfile(user=f_user, profile_name=f_profile_name)
-#              p.save()
-#     else:
-#             form = ProfileForm()
-#     return render_to_response('userprofile_template.html', locals(), context_instance=RequestContext(request))
-    
-
-# def get_name(request):
-#     # if this is a POST request we need to process the form data
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#         form = NameForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             return HttpResponseRedirect('/home/')
-
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = NameForm()
-
-#     return render(request, '/home/', {'form': form})
+def location_view(request):
+    dictionary = json.loads(request.user.content)
+    desired_format = '%H:%M'
+    if request.method == 'POST':
+        form = LocationForm(request.POST, instance=request.user)
+        if form.is_valid():
+            saveform = form.save(commit=False)
+            location = {'address':form.cleaned_data.get('address'),'opentime':form.cleaned_data.get('opentime'),
+            'closetime':form.cleaned_data.get('closetime')}
+            dictionary = json.loads(request.user.content)
+            templatelocations = dictionary["locations"]
+            templatelocations.append(location)
+            dictionary["locations"] = templatelocations
+            saveform.content = json.dumps(dictionary)
+            saveform.save()
+            return redirect('profile')
+    else:
+        form = LocationForm()
+    return render(request, 'makelocation.html', {'form': form })
