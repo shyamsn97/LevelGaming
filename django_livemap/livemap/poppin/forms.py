@@ -30,8 +30,8 @@ class ProfileForm(ModelForm):
 
 class LocationForm(ModelForm):
     address = forms.CharField(max_length=254)
-    opentime = forms.TimeField(input_formats='%H:%M',label="Open Time")
-    closetime = forms.TimeField(input_formats='%H:%M',label="Close Time")
+    opentime = forms.CharField(max_length=254,label="Open Time")
+    closetime = forms.CharField(max_length=254,label="Close Time")
 
     # def save(self, request):
     #     newuser = request.user

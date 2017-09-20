@@ -34,7 +34,7 @@ class MyUserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 class myUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=30, default="")
+    username = models.EmailField(max_length=30, default="")
     first_name = models.CharField(max_length=30, default="") 
     last_name = models.CharField(max_length=30, default="")
     content = models.CharField(max_length=900000, default="")  

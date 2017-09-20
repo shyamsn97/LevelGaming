@@ -1,7 +1,6 @@
 {% include "header.html" %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'poppin/content.css' %}">
-
 {% block content %}
   <form method="post">
   {% if user.is_authenticated %}

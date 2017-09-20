@@ -21,53 +21,39 @@ def editprofile(request):
     dictionary = json.loads(request.user.content)
     editprofileform = ProfileForm(data=request.POST, instance=request.user, initial={'first_names': dictionary["firstname"], 
             'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
-    editlocationform = LocationForm(data=request.POST, instance=request.user, initial={'address': dictionary["address"], 
-            'opentime': dictionary["opentime"], 'closetime': dictionary["closetime"]})
+    editlocationform = LocationForm(data=request.POST, instance=request.user, initial={'address': dictionary["locations"][0]["address"], 
+            'opentime': dictionary["locations"][0]["opentime"], 'closetime': dictionary["locations"][0]["closetime"]})
+    templatelocations = dictionary["locations"]
+    count = 0
     if request.method == 'POST':
         if editprofileform.is_valid():
-            # newsaveform = SignUpForm(request.POST, initial = {'first_name': request.user.first_name, 
-            # 'last_name': request.user.last_name, 'address': dictionary["address"], 'cardcompany': dictionary["cardcompany"],
-            # 'accountnumber': dictionary["accountnumber"]})
             saveuser = editprofileform.save(commit=False)
-            # saveprofile = myUser.objects.get(username = request.user.username)
-            # saveprofileform = ProfileForm(request.POST, instance=request.user)
             dictionary["businessname"] = editprofileform.cleaned_data.get('busyname')
             dictionary["firstname"] = editprofileform.cleaned_data.get('first_names')
             dictionary["lastname"] = editprofileform.cleaned_data.get('last_names')
             saveuser.content = json.dumps(dictionary)
-            # saveuser.first_name = editprofileform.cleaned_data.get('firstname')
-            # saveuser.last_name = editprofileform.cleaned_data.get('lastname')
             saveuser.save()
             return redirect('profile')
 
         if editlocationform.is_valid():
-            # newsaveform = SignUpForm(request.POST, initial = {'first_name': request.user.first_name, 
-            # 'last_name': request.user.last_name, 'address': dictionary["address"], 'cardcompany': dictionary["cardcompany"],
-            # 'accountnumber': dictionary["accountnumber"]})
             saveuser = editlocationform.save(commit=False)
-            # saveprofile = myUser.objects.get(username = request.user.username)
-            # saveprofileform = ProfileForm(request.POST, instance=request.user)
-            dictionary["address"] = editlocationform.cleaned_data.get('address')
-            dictionary["opentime"] = editlocationform.cleaned_data.get('opentime')
-            dictionary["closetime"] = editlocationform.cleaned_data.get('closetime')
+            dictionary["locations"][0]["address"] = editlocationform.cleaned_data.get('address')
+            dictionary["locations"][0]["opentime"] = editlocationform.cleaned_data.get('opentime')
+            dictionary["locations"][0]["closetime"] = editlocationform.cleaned_data.get('closetime')
             saveuser.content = json.dumps(dictionary)
-            # saveuser.first_name = editprofileform.cleaned_data.get('firstname')
-            # saveuser.last_name = editprofileform.cleaned_data.get('lastname')
             saveuser.save()
+            formarray = [editlocationform]
             return redirect('profile')
+
     else:
         editprofileform = ProfileForm(request.POST or None, instance=request.user, initial={'first_names': dictionary["firstname"], 
             'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
-        editlocationform = LocationForm(request.POST or None, instance=request.user, initial={'address': dictionary["address"], 
-            'opentime': dictionary["opentime"], 'closetime': dictionary["closetime"]})        
-    return render(request, 'profile.html', {'profileform': editprofileform, 'locationform': editlocationform,
+        editlocationform = LocationForm(request.POST or None, instance=request.user, initial={'address': dictionary["locations"][0]["address"], 
+            'opentime': dictionary["locations"][0]["opentime"], 'closetime': dictionary["locations"][0]["closetime"]})
+        formarray = [editlocationform]        
+    return render(request, 'profile.html', {'formarray': formarray, 'locations': templatelocations,'profileform': editprofileform, 'locationform': editlocationform,
         'dictionary': dictionary})
 
-
-# def showprofile(request):
-#     dictionary = json.loads(request.user.content)
-#     return render(request, 'profile.html', {'dictionary': dictionary})
-        
 def signup(request):
     desired_format = '%H:%M'
     if request.method == 'POST':
@@ -76,10 +62,12 @@ def signup(request):
             saveform = form.save(commit=False)
             saveform.first_name = form.cleaned_data.get('firstname')
             saveform.last_name = form.cleaned_data.get('lastname')
+            location = {'address':form.cleaned_data.get('address'),'opentime':form.cleaned_data.get('opentime').strftime(desired_format),
+            'closetime':form.cleaned_data.get('closetime').strftime(desired_format)}
+            locationlist = [location]
+            # jsonlist = json.dumps(locationlist)
             json_object = {'firstname': form.cleaned_data.get('firstname'),'lastname': form.cleaned_data.get('lastname'),
-            'businessname': form.cleaned_data.get('businessname'),'address': form.cleaned_data.get('address'),
-            'opentime': (form.cleaned_data.get('opentime')).strftime(desired_format), 
-            'closetime': (form.cleaned_data.get('closetime')).strftime(desired_format)}
+            'businessname': form.cleaned_data.get('businessname'), 'locations':locationlist}
             saveform.content = json.dumps(json_object)
             saveform.save()
             email = form.cleaned_data.get('email')

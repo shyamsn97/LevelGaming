@@ -24,6 +24,7 @@
       width: 100%;
       margin: 8px 0;
       box-sizing: border-box;
+
     }
         button {
     background-color: #fff;
@@ -34,6 +35,6 @@
     }
 
     button:hover {
-    background-color: #A828A8; 
+    background-color: #b000ff; 
     color: white;
     }
