@@ -19,13 +19,24 @@ class HomePageView(TemplateView):
 
 def editprofile(request):
     dictionary = json.loads(request.user.content)
-    editprofileform = ProfileForm(request.POST, instance=request.user, initial={'first_names': dictionary["firstname"], 
-            'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
-    editlocationform = LocationForm(request.POST, instance=request.user, initial={'address': dictionary["locations"][0]["address"], 
-            'opentime': dictionary["locations"][0]["opentime"], 'closetime': dictionary["locations"][0]["closetime"]})
     templatelocations = dictionary["locations"]
+    for index, newlocations in enumerate(dictionary["locations"], start=0):
+        if index == 0:
+            addresses = [dictionary["locations"][0]["address"]]
+        else:
+            addresses.append(dictionary["locations"][index]["address"])
+
     count = 0
     if request.method == 'POST':
+        for index, indexlocation in enumerate(templatelocations, start=0):
+                locateform = LocationForm(request.POST, instance=request.user, initial={'address': dictionary["locations"][index]["address"], 
+                'opentime': dictionary["locations"][index]["opentime"], 'closetime': dictionary["locations"][index]["closetime"]})
+                if index==0:
+                    formarray = [locateform]
+                else:
+                    formarray.append(locateform)
+        editprofileform = ProfileForm(request.POST, instance=request.user, initial={'first_names': dictionary["firstname"], 
+            'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
         if editprofileform.is_valid():
             saveuser = editprofileform.save(commit=False)
             dictionary["businessname"] = editprofileform.cleaned_data.get('busyname')
@@ -34,24 +45,34 @@ def editprofile(request):
             saveuser.content = json.dumps(dictionary)
             saveuser.save()
             return redirect('profile')
-
-        if editlocationform.is_valid():
-            saveuser = editlocationform.save(commit=False)
-            dictionary["locations"][0]["address"] = editlocationform.cleaned_data.get('address')
-            dictionary["locations"][0]["opentime"] = editlocationform.cleaned_data.get('opentime')
-            dictionary["locations"][0]["closetime"] = editlocationform.cleaned_data.get('closetime')
-            saveuser.content = json.dumps(dictionary)
-            saveuser.save()
-            formarray = [editlocationform]
-            return redirect('profile')
+            
+    for index, newlocations in enumerate(dictionary["locations"], start=0):
+        buttonstr = "button" + str(index)
+        if request.method == 'POST' and buttonstr in request.POST:
+            editlocationform = formarray[index]
+            if editlocationform.is_valid():
+                saveuser = editlocationform.save(commit=False)
+                dictionary["locations"][index]["address"] = editlocationform.cleaned_data.get('address')
+                dictionary["locations"][index]["opentime"] = editlocationform.cleaned_data.get('opentime')
+                dictionary["locations"][index]["closetime"] = editlocationform.cleaned_data.get('closetime')
+                saveuser.content = json.dumps(dictionary)
+                saveuser.save()
+                # formarray = [editlocationform]
+                return redirect('profile')
 
     else:
         editprofileform = ProfileForm(request.POST or None, instance=request.user, initial={'first_names': dictionary["firstname"], 
             'last_names': dictionary["lastname"], 'busyname': dictionary["businessname"]})
-        editlocationform = LocationForm(request.POST or None, instance=request.user, initial={'address': dictionary["locations"][0]["address"], 
-            'opentime': dictionary["locations"][0]["opentime"], 'closetime': dictionary["locations"][0]["closetime"]})
-        formarray = [editlocationform]        
-    return render(request, 'profile.html', {'formarray': formarray, 'locations': templatelocations,'profileform': editprofileform, 'locationform': editlocationform,
+        formarray = [] 
+        for index, newlocations in enumerate(dictionary["locations"], start=0):
+            locationform = LocationForm(request.POST or None, instance=request.user, initial={'address': dictionary["locations"][index]["address"], 
+                'opentime': dictionary["locations"][index]["opentime"], 'closetime': dictionary["locations"][index]["closetime"]})
+            formarray.append(locationform)
+        # for index, indexlocation in enumerate(templatelocations, start=1):
+        #     locateform = LocationForm(request.POST, instance=request.user, initial={'address': dictionary["locations"][index]["address"], 
+        #     'opentime': dictionary["locations"][index]["opentime"], 'closetime': dictionary["locations"][index]["closetime"]})
+            # formarray.append(locateform)       
+    return render(request, 'profile.html', {'addresses': addresses, 'formarray': formarray, 'locations': templatelocations,'profileform': editprofileform,
         'dictionary': dictionary})
 
 def signup(request):

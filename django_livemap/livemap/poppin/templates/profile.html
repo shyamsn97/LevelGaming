@@ -42,7 +42,9 @@ div.tab button.active {
     background-color: #ccc;
 }
 
-
+#bigbody {
+  margin: 0 auto;
+}
 /*#bitch {
     position: relative;
     top: 8em;
@@ -59,10 +61,12 @@ div.tab button.active {
 }
 #show {
     cursor: pointer;
-    position: absolute;
+    position: relative;
     color: #A828A8;
-    top: 5em;
-    left: 11em;
+    top: 3.4em;
+    left: -1em;
+    padding-right: 3em;
+    white-space: nowrap;;
 }
 #Profile, #Locations { 
   font-size: 1.5em;
@@ -70,7 +74,6 @@ div.tab button.active {
 /*    border: 1px solid #ccc;
 */  background-color: black;
     width: 15%;
-    height: 70%;
     top: 0em;
     padding-left: 5em;
 
@@ -78,13 +81,12 @@ div.tab button.active {
 
 	</style>
   <p>Click on the buttons inside the tabbed menu:</p>
-
+<div id = "bigbody">
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'Profile'), choice = 0", id="defaultOpen">Profile</button>
   <button class="tablinks" onclick="openTab(event, 'Locations'), choice = 1", id="defaultOpen1">Locations</button>
   <button class="tablinks" onclick="openTab(event, 'Settings'), choice = 2", id="defaultOpen2">Settings</button>
 </div>
-
 
     <div id="Profile" class="tabcontent">
      <form id = "stuff" method="post">
@@ -109,8 +111,8 @@ div.tab button.active {
 <div id="Locations" class="tabcontent">
 <a id ="createlocation", href="{% url 'makelocation' %}">New Location</a>
 {% for pickform in formarray %}
-<span id = "show", onclick="showLocation(1,1)">{{ dictionary.locations.0.address }}</span>
-     <form id = "locationstuff" style="display: none" method="post">
+<span id = "show", onclick="showLocation(1,1,{{forloop.counter0}})">Location{{forloop.counter}}</span>
+     <form id = "locationstuff{{forloop.counter0}}", style="display: none" method="post">
       {% csrf_token %}
       {% for field in pickform %}
       <p>
@@ -124,7 +126,7 @@ div.tab button.active {
         {% endfor %}
       </p>
     {% endfor %}
-    <button type="submit">Save Changes</button>
+    <button type="submit" name = "button{{forloop.counter0}}">Save Changes</button>
     </form>
 {% endfor %}
 <!-- <button id = "bitch", onclick="showLocation(1,2)">YoBitch</button>
@@ -151,7 +153,7 @@ div.tab button.active {
     <h1><a href="">Change Password</a></h1>
   </ul>
 </div>
-
+</div>
 <script>
 // function showProfile() {
 //   openTab(event, 'Profile')
@@ -171,23 +173,14 @@ function openTab(evt, tablename) {
     evt.currentTarget.className += " active";
 }
 
-function showLocation(a, c) {
-  var x = document.getElementById("locationstuff")
-  var y = document.getElementById("locationstuff2")
+function showLocation(a, c,index) {
+  var x = document.getElementById("locationstuff" + index)
   if(c == 1) {
     if(x.style.display=="none") {
       x.style.display="block"
     }
     else if(x.style.display != "none" && a==1) {
       x.style.display="none"
-    }
-  }
-  else {
-      if(y.style.display=="none") {
-      y.style.display="block"
-    }
-    else if(y.style.display != "none" && a==1) {
-      y.style.display="none"
     }
   }
 }
