@@ -38,7 +38,6 @@ class myUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, default="") 
     last_name = models.CharField(max_length=30, default="")
     content = models.CharField(max_length=9000000, default="")  
-    #last_name = models.CharField(max_length=30, default="")  
   
     email = models.EmailField(unique=True, null=True)
     is_staff = models.BooleanField(

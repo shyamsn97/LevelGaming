@@ -48,7 +48,7 @@ def editprofile(request):
             
     for index, newlocations in enumerate(dictionary["locations"], start=0):
         buttonstr = "button" + str(index)
-        if request.method == 'POST' and buttonstr in request.POST:
+        if buttonstr in request.POST:
             editlocationform = formarray[index]
             if editlocationform.is_valid():
                 saveuser = editlocationform.save(commit=False)
@@ -57,7 +57,6 @@ def editprofile(request):
                 dictionary["locations"][index]["closetime"] = editlocationform.cleaned_data.get('closetime')
                 saveuser.content = json.dumps(dictionary)
                 saveuser.save()
-                # formarray = [editlocationform]
                 return redirect('profile')
 
     else:
@@ -68,10 +67,6 @@ def editprofile(request):
             locationform = LocationForm(request.POST or None, instance=request.user, initial={'address': dictionary["locations"][index]["address"], 
                 'opentime': dictionary["locations"][index]["opentime"], 'closetime': dictionary["locations"][index]["closetime"]})
             formarray.append(locationform)
-        # for index, indexlocation in enumerate(templatelocations, start=1):
-        #     locateform = LocationForm(request.POST, instance=request.user, initial={'address': dictionary["locations"][index]["address"], 
-        #     'opentime': dictionary["locations"][index]["opentime"], 'closetime': dictionary["locations"][index]["closetime"]})
-            # formarray.append(locateform)       
     return render(request, 'profile.html', {'addresses': addresses, 'formarray': formarray, 'locations': templatelocations,'profileform': editprofileform,
         'dictionary': dictionary})
 
@@ -86,7 +81,6 @@ def signup(request):
             location = {'address':form.cleaned_data.get('address'),'opentime':form.cleaned_data.get('opentime').strftime(desired_format),
             'closetime':form.cleaned_data.get('closetime').strftime(desired_format)}
             locationlist = [location]
-            # jsonlist = json.dumps(locationlist)
             json_object = {'firstname': form.cleaned_data.get('firstname'),'lastname': form.cleaned_data.get('lastname'),
             'businessname': form.cleaned_data.get('businessname'), 'locations':locationlist}
             saveform.content = json.dumps(json_object)
