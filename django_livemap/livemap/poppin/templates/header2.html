@@ -1,0 +1,40 @@
+        {% load static %}
+      <link rel="stylesheet" href="{% static 'poppin/demo.css' %}">
+      <link rel="stylesheet" href="{% static 'poppin/header-user-dropdown.css' %}">
+      <link rel="stylesheet" href="{% static 'poppin/skel.css' %}" >
+      <link rel="stylesheet" href="{% static 'poppin/style.css' %}" >
+
+      <style>
+        #username {
+          cursor: pointer;
+        }
+      </style>
+      <script>
+        $('.dropdown-content').width($('username').outerWidth());
+
+      </script>
+      <header id="header">
+        <h1><a href="/">LiveMap</a></h1>
+        <nav id="nav">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <div class="dropdown" >
+              {% if user.is_authenticated %}
+              <a id = "username" >{{ user.email}} </a> 
+              {% else %}
+              {% endif %}
+              <div class = "dropdown-content">
+              <span> <a class = "dropcontent" href="{% url 'profile' %}">Profile</a></span>
+              <span> <a class = "dropcontent" href="">Settings</a></span>
+              <span> <a class = "dropcontent" href="{% url 'logout' %}">Logout</a></span>
+              </div>
+              </div>
+            </li>
+            {% if user.is_authenticated %}
+            {% else %}
+            <li><a href="{% url 'login' %}" class="button special">Log In</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
