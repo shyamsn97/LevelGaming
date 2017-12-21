@@ -1,0 +1,87 @@
+<header>
+<style>
+body {font-family: "Lato", sans-serif;}
+
+
+/* Style the tab content */
+.tabcontent {
+    color: white;
+    padding: 2em;
+    text-align: left;
+    background-color:black;
+}
+h1 {
+  font-size: 1.5em;
+}
+#username {
+  text-align: right;
+  color: white;
+}
+#signup {
+  text-align: right;
+}
+#login {
+  text-align: right;
+}
+
+/*#block1 {
+      border-style: solid;
+        border-width: 0.2em;
+          background-image: url("images/android.gif");
+          background-repeat: no-repeat;
+          background-position: center; 
+    background-size: auto 100%;
+    border: 0.5em;
+    width:4em;
+    height:20em;
+    padding-left: 20em;
+    margin-right:0.05em;
+}*/
+</style>
+<div id="London" class="tabcontent">
+  <h3>LEVEL GAMING</h3>
+  {% if user.is_authenticated %}
+   <h1><a id = "username" >{{ user.username }} </a></h1>
+      <h1 id = "logout"><a href="{% url 'logout' %}">Logout</a></h1>
+  {% else %}
+  <h1 id= "signup" ><a href="{% url 'signup' %}">Sign Up</a></h1>
+  <h1 id= "login" ><a href="{% url 'login' %}">Login</a></h1>
+  {% endif %}
+</div>
+</header>
+
+
+<!--       {% load static %}
+      <link rel="stylesheet" href="{{STATIC_URL}}header-user-dropdown.css">
+
+      <style>
+        #username {
+          cursor: pointer;
+        }
+      </style>
+      <script>
+	function Show(){
+	document.getElementsByClassName("dropdown-content").style.display = "block";
+
+	}
+  $('.dropdown-content').width($('username').outerWidth());
+	document.getElementById("username").onclick = function() {Show()};
+      </script>
+      <header id="header">
+        <h1 class= "maintitle" ><a href="/">LevelGaming</a></h1>
+        <nav id="nav">
+          <ul>
+            <li>
+            <div class="dropdown" >
+              {% if user.is_authenticated %}
+              <a id = "username" >{{ user.username }} </a> 
+              <div class = "dropdown-content">
+              </div>
+              </div>
+            </li>
+            {% else %}
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+ -->

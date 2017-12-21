@@ -1,0 +1,29 @@
+  {% load static %}
+ {% include "header.html" %}
+<style >
+body{
+	background-color: black;
+}
+	#three {
+		background-color: gray;
+		width: 100%;
+		display: inline-block;
+	}
+	#news {
+		list-style-type: none;
+		font-size: 0.8em;
+	}
+
+</style>
+
+<div id="three" class="wrapper style1">
+<ul id="news">
+<li><h1>Top News Stories</h1></li>
+{% for choices in newsstories %}
+ <a href="{{choices.url}}">{{choices.url}}</a>
+ <li>{{choices.title}}</li>
+  <li>{{choices.date}}</li>
+<br>
+{% endfor %}
+</ul>
+</div>
