@@ -23,5 +23,8 @@ def update_user_profile(sender, instance, created, **kwargs):
     instance.profile.save()
 
 
-class Videos(models.Model):
+class Video(models.Model):
     link = models.TextField(max_length=5000000000000)
+    username = models.TextField(max_length= 60000000,default="")
+    description = models.TextField(max_length= 60000000,default="")
+    title = models.TextField(max_length= 60000000,default="")

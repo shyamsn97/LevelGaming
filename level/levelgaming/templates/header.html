@@ -24,6 +24,9 @@ h1 {
   text-align: right;
 }
 
+#maintitle {
+  text-decoration: none;
+}
 /*#block1 {
       border-style: solid;
         border-width: 0.2em;
@@ -39,10 +42,13 @@ h1 {
 }*/
 </style>
 <div id="London" class="tabcontent">
-  <h3>LEVEL GAMING</h3>
+  <h3 id= "maintitle" ><a href="/">LEVEL GAMING</a></h3>
+  {% csrf_token %}
   {% if user.is_authenticated %}
    <h1><a id = "username" >{{ user.username }} </a></h1>
       <h1 id = "logout"><a href="{% url 'logout' %}">Logout</a></h1>
+      <h1 id = "profile"><a href="{% url 'profile' %}">Profile</a></h1>
+
   {% else %}
   <h1 id= "signup" ><a href="{% url 'signup' %}">Sign Up</a></h1>
   <h1 id= "login" ><a href="{% url 'login' %}">Login</a></h1>

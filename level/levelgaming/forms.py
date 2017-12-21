@@ -1,6 +1,7 @@
 
 from django import forms
 from django.forms import ModelForm
+from .models import Video
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
@@ -34,3 +35,9 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
         return user
+
+class VideoForm(ModelForm):
+    bannerurl = forms.URLField(max_length=250,label="Link")
+    class Meta:
+        model = Video
+        fields = ['bannerurl']
