@@ -2,7 +2,7 @@
 {% include "header.html" %}
 <style >
 body{
-	background-color: black;
+	background-color: gray;
 }
 	#three {
 		background-color: gray;
@@ -29,7 +29,7 @@ body{
 }
 
 /* Modal Content */
-.follower-modal-content, .following-modal-content {
+.follower-modal-content, .following-modal-content, .video-modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -38,7 +38,7 @@ body{
 }
 
 /* The Close Button */
-.close, .followingclose {
+.close, .followingclose, .videoclose {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
@@ -48,10 +48,16 @@ body{
 .close:hover,
 .followingclose:hover,
 .followingclose:focus,
+.videoclose:hover,
+.videoclose:focus,
 .close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+#videobox {
+	text-align: center;
 }
 </style>
 
@@ -71,7 +77,9 @@ body{
     {%endfor%}
 
   </div>
-
+<br>
+<br>
+<br>
 </div>
 <button id="following">Following</button>
 <!-- Trigger/Open The Modal -->
@@ -86,28 +94,37 @@ body{
     {%endfor%}
   </div>
 </div>
+
+
 </div>
 
+<div id="videobox">
+<h1>Videos</h1>
+{% for vid in videos %}
+    <iframe class = "videobox" width="420" height="345" src={{vid}}></iframe>
+   {% for title in videotitles %}
+      {% if forloop.counter == forloop.parentloop.counter %}
+        <h4>{{ title }}</h4>
+      {% endif %}
+   {% endfor %}
+    <br>
+    {%endfor%}
+</div>
 <script>
 // Get the modal
 var modal = document.getElementById('followermodal');
-
 // Get the button that opens the modal
 var btn = document.getElementById("followers");
-
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
     modal.style.display = "block";
 }
-
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
 }
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
@@ -117,27 +134,42 @@ window.onclick = function(event) {
 
 // Get the modal
 var modal2 = document.getElementById('followingmodal');
-
 // Get the button that opens the modal
 var btn2 = document.getElementById("following");
-
 // Get the <span> element that closes the modal
 var span2 = document.getElementsByClassName("followingclose")[0];
-
 // When the user clicks the button, open the modal 
 btn2.onclick = function() {
     modal2.style.display = "block";
 }
-
 // When the user clicks on <span> (x), close the modal
 span2.onclick = function() {
     modal2.style.display = "none";
 }
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal2) {
         modal2.style.display = "none";
+    }
+}
+
+var modal3 = document.getElementById('videomodal');
+// Get the button that opens the modal
+var btn3 = document.getElementById("video");
+// Get the <span> element that closes the modal
+var span3 = document.getElementsByClassName("videoclose")[0];
+// When the user clicks the button, open the modal 
+btn3.onclick = function() {
+    modal3.style.display = "block";
+}
+// When the user clicks on <span> (x), close the modal
+span3.onclick = function() {
+    modal3.style.display = "none";
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal3) {
+        modal3.style.display = "none";
     }
 }
 </script>

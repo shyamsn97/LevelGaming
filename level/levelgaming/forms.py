@@ -41,3 +41,6 @@ class VideoForm(ModelForm):
     class Meta:
         model = Video
         fields = ['bannerurl']
+
+class VideoSearch(forms.Form):
+    search = forms.CharField(max_length=255, required=True)

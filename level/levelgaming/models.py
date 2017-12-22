@@ -28,3 +28,4 @@ class Video(models.Model):
     username = models.TextField(max_length= 60000000,default="")
     description = models.TextField(max_length= 60000000,default="")
     title = models.TextField(max_length= 60000000,default="")
+    date = models.DateTimeField(default= datetime.datetime.now())
