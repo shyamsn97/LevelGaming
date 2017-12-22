@@ -44,6 +44,7 @@ h1 {
 <div id="London" class="tabcontent">
   <h3 id= "maintitle" ><a href="/">LEVEL GAMING</a></h3>
   {% csrf_token %}
+
   {% if user.is_authenticated %}
    <h1><a id = "username" >{{ user.username }} </a></h1>
       <h1 id = "logout"><a href="{% url 'logout' %}">Logout</a></h1>
@@ -53,7 +54,9 @@ h1 {
   {% else %}
   <h1 id= "signup" ><a href="{% url 'signup' %}">Sign Up</a></h1>
   <h1 id= "login" ><a href="{% url 'login' %}">Login</a></h1>
+  <h1 id = "videos"><a href="{% url 'videos' %}">Videos</a></h1>
   {% endif %}
+
 </div>
 </header>
 
