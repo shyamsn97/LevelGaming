@@ -24,10 +24,25 @@
 	    </ul>
     </div>
 
-    <div class="col-sm-6">
+<div class="col-sm-6">
     	<h2>Recent Videos</h2>
+ 
+  {% for vid in videos %}
+<!--     <div class="embed-responsive embed-responsive-16by9">
+ -->      <iframe  width="420" height="345" class="embed-responsive-item" src="{{vid}}"></iframe>
+      {% for title in videotitles %}
+       {% if forloop.counter == forloop.parentloop.counter %}
+          {% for user in users %}
+            {% if forloop.counter == forloop.parentloop.counter %}
+              <h4>{{ title }} - {{user}}</h4>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+<!--     </div>
+ -->    <br>
+  {% endfor %}
 
-    	Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto.    
-    </div>
+    </div> 
 </div>
 {% endblock %}

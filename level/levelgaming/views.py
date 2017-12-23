@@ -24,11 +24,14 @@ from lxml import etree
 # Create your views here.
 class HomePageView(TemplateView):
     def get(self, request, **kwargs):
-        #newsstories = es.getNews("a9f1a681-546e-43b1-96aa-24443c47a837")
-        newsstories = ["l","p"]
+        newsstories = es.getNews("a9f1a681-546e-43b1-96aa-24443c47a837")
+        videolist = list(Video.objects.values_list('link',flat=True).order_by('-date'))
+        videotitles = list(Video.objects.values_list('title',flat=True).order_by('-date'))
+        videousers = list(Video.objects.values_list('username',flat=True).order_by('-date'))
+      #  newsstories = ["l","p"]
         # jews = list(User.objects.values('username'))
         # jews = [j["username"] for j in jews]
-        return render(request, 'index.html', {"newsstories":newsstories})
+        return render(request, 'index.html', {"newsstories":newsstories,"users":videousers,"videos":videolist,"videotitles":videotitles})
 
 def videos_view(request):
     # def get(self, request, **kwargs):
@@ -162,7 +165,7 @@ def login_view(request):
     return render(request, 'login.html', {'form': form })
 
 def logout_view(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         logout(request)
     return redirect("home")
 
