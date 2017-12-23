@@ -14,7 +14,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 # from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-import datetime, pytz
+import datetime
 import levelgaming.esports_news_test as es        
 import lxml
 import urllib.request
@@ -26,10 +26,9 @@ class HomePageView(TemplateView):
     def get(self, request, **kwargs):
         #newsstories = es.getNews("a9f1a681-546e-43b1-96aa-24443c47a837")
         newsstories = ["l","p"]
-        jews = list(User.objects.values('username'))
-        jews = [j["username"] for j in jews]
-        print(jews)
-        return render(request, 'index.html', {"newsstories":newsstories,"users":jews})
+        # jews = list(User.objects.values('username'))
+        # jews = [j["username"] for j in jews]
+        return render(request, 'index.html', {"newsstories":newsstories})
 
 def videos_view(request):
     # def get(self, request, **kwargs):
@@ -48,6 +47,40 @@ def videos_view(request):
         # print(videofull)
         return render(request, 'videos.html',{"tag":tag,"form":form,"users":videousers,"videos":videolist,"videotitles":videotitles})
 
+def usersearch(request):
+        form = VideoSearch(request.POST or None)
+        username = " "
+        following = 99
+        followers = 99
+        tag = " "
+        videotitles = []
+        videolist = []
+        videousers = []
+        check = 0
+        if request.POST and form.is_valid():
+            try:
+                user = User.objects.get(username=form.cleaned_data.get('search'))
+                username = user.username
+                #following = len(user.profile.following["following"])
+                followers = user.profile.followers
+                followers = (json.loads(followers))
+                followers = len(followers["followers"])
+                following = user.profile.following
+                following = (json.loads(following))
+                following = len(following["following"])
+                #followers = len(user.profile.following["followers"])
+                videolist = list(Video.objects.values_list('link',flat=True).filter(username=form.cleaned_data.get('search')).order_by('-date'))
+                videotitles = list(Video.objects.values_list('title',flat=True).filter(username=form.cleaned_data.get('search')).order_by('-date'))
+                videousers = list(Video.objects.values_list('username',flat=True).filter(username=form.cleaned_data.get('search')).order_by('-date'))
+                tag = "Videos by User: " + form.cleaned_data.get('search')
+            except Exception as e:
+                tag = "User: " + form.cleaned_data.get("search") + " not found"        
+        else:
+            username = " "
+        # videofull = list(zip(videolist, videotitles))
+        # print(videofull)
+        return render(request, 'usersearch.html',{"tag":tag, "check":check,"username":username,"following":following,"followers":followers,"form":form,"users":videousers,"videos":videolist,"videotitles":videotitles})
+
 class ProfileView(TemplateView):
     def get(self, request, **kwargs):
         followers = request.user.profile.followers
@@ -61,6 +94,48 @@ class ProfileView(TemplateView):
         # videofull = list(zip(videolist, videotitles))
         # print(videofull)
         return render(request, 'profile.html',{"followers":followers,"following":following,"videos":videolist,"videotitles":videotitles})
+
+def delete(request, vid):
+    query = Video.objects.get(link=vid)
+    query.delete()
+    return redirect("profile")
+
+def follow(request, name):
+    user = request.user
+    otheruser = User.objects.get(username=name)
+    following = request.user.profile.following
+    following = (json.loads(following))
+    if otheruser.username in following["following"]:
+        print("already in list")
+    else:
+        following["following"].append(otheruser.username)
+        print(following)
+        user.profile.following = json.dumps(following)
+        user.save()
+        followers = otheruser.profile.followers
+        followers = (json.loads(followers))
+        followers["followers"].append(user.username)
+        otheruser.profile.followers = json.dumps(followers)
+        otheruser.save()
+    return redirect("profile")
+
+def linkprofile(request, name):
+    user = User.objects.get(username=name)
+    username = user.username
+    check = 1
+    #following = len(user.profile.following["following"])
+    followers = user.profile.followers
+    followers = (json.loads(followers))
+    followers = len(followers["followers"])
+    following = user.profile.following
+    following = (json.loads(following))
+    following = len(following["following"])
+    #followers = len(user.profile.following["followers"])
+    videolist = list(Video.objects.values_list('link',flat=True).filter(username=name).order_by('-date'))
+    videotitles = list(Video.objects.values_list('title',flat=True).filter(username=name).order_by('-date'))
+    videousers = list(Video.objects.values_list('username',flat=True).filter(username=name).order_by('-date'))
+    tag = "Videos by User: " + name
+    return render(request, 'usersearch.html',{"tag":tag,"check":check,"username":username,"following":following,"followers":followers,"users":videousers,"videos":videolist,"videotitles":videotitles})
 
 def addvideo(request):
     form = VideoForm(request.POST or None)
@@ -87,7 +162,8 @@ def login_view(request):
     return render(request, 'login.html', {'form': form })
 
 def logout_view(request):
-    logout(request)
+    if request.user.is_authenticated():
+        logout(request)
     return redirect("home")
 
 def signup(request):
@@ -99,9 +175,9 @@ def signup(request):
             saveform.save()
             user = User.objects.get(username=form.cleaned_data.get('username'))
             dic = {}
-            dic["followers"] = ["test","whatever"]
+            dic["followers"] = []
             followingdic = {}
-            followingdic["following"] = ["jim","john","jack"]
+            followingdic["following"] = []
             user.profile.followers = json.dumps(dic)
             user.profile.following = json.dumps(followingdic)
             login(request, user)

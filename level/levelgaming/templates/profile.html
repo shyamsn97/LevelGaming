@@ -16,6 +16,10 @@ body{
 		font-size: 0.8em;
 	}
 
+    #delete {
+        color: red;
+        text-decoration: none;
+    }
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -64,8 +68,8 @@ body{
 </style>
 
 <div id="three" class="wrapper style1">
-    <h1><a id = "username" >{{ user.username }} </a></h1>
-    <a href="{% url 'addvideo' %}">Add Video</a>
+    <h1 id = "username" >{{ user.username }} </h1>
+    <h1><a href="{% url 'addvideo' %}">Add Video</a></h1>
 
     <button id="followers">Followers</button>
     <!-- Trigger/Open The Modal -->
@@ -75,8 +79,9 @@ body{
         <div class="follower-modal-content">
             <span class="close">&times;</span>
             {% for foll in followers %}
-            <h1><a>{{foll}}</a></h1>
-            <br>
+            <h1><a id = "linkprofile" href="/linkprofile/{{ foll }}">{{foll}}</a></h1>
+<!--             <h1><a>{{foll}}</a></h1>
+ -->            <br>
             {%endfor%}
         </div>
         <br>
@@ -90,7 +95,7 @@ body{
         <div class="following-modal-content">
             <span class="followingclose">&times;</span>
             {% for folw in following %}
-            <h1><a>{{folw}}</a></h1>
+            <h1><a id = "linkprofile" href="/linkprofile/{{folw}}">{{folw}}</a></h1>
             <br>
             {%endfor%}
         </div>
@@ -106,6 +111,7 @@ body{
         <h4>{{ title }}</h4>
       {% endif %}
    {% endfor %}
+    <h1><a id = "delete" href="/delete/{{ vid }}">Delete</a></h1>
     <br>
     {%endfor%}
 </div>

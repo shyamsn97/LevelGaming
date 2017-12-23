@@ -1,26 +1,32 @@
 {% extends "base.html" %}
 {% load static %}
 
+<style>
+  #mainstuff {
+    text-align: center;
+  }
+</style>
 {% block content %}
-<div class="jumbotron">
-  <div class="container">
-    <!-- <form method="post">
-      <div class="input-group col-sm-3">
-        <input type="text" class="form-control" placeholder="Search videos by username">
-        <div class="input-group-btn">
-          <button class="btn btn-default" type="search">
-            <i class="glyphicon glyphicon-search"></i>
-          </button>
-        </div>
-      </div>
-    </form> -->
-    <h2 class="text-center">Recent Videos</h2>
-</div>
-
-<div class="container">
+<div id = "mainstuff" class="container">
+  <form method="post">
+ {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.help_text %}
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+   <button type="submit" class= "button alt">Search By User</button>
+ </form>
+<h1>{{tag}}</h1>
   {% for vid in videos %}
-    <div class="embed-responsive embed-responsive-16by9">
-      <iframe class="embed-responsive-item" src="{{vid}}"></iframe>
+<!--     <div class="embed-responsive embed-responsive-16by9">
+ -->      <iframe  width="420" height="345" class="embed-responsive-item" src="{{vid}}"></iframe>
       {% for title in videotitles %}
        {% if forloop.counter == forloop.parentloop.counter %}
        	  {% for user in users %}
@@ -30,7 +36,8 @@
           {% endfor %}
         {% endif %}
       {% endfor %}
-    </div>
+<!--     </div>
+ -->    <br>
   {% endfor %}
 </div>
 {% endblock %}
