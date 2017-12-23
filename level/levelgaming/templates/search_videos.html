@@ -1,0 +1,60 @@
+{% load static %}
+{% include "header.html" %}
+<style >
+body{
+  background-color: black;
+}
+  #three {
+    background-color: gray;
+    width: 100%;
+    display: inline-block;
+  }
+  #news {
+    list-style-type: none;
+    font-size: 0.8em;
+  }
+  #videobox {
+    text-align: center;
+  }
+</style>
+
+<div id="three" class="wrapper style1">
+<div id="videobox">
+<div id="buttonbox">
+<!-- <form id="myform" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="flag" value="2" />
+    <a href="{% url 'videos' %}"onclick="document.forms[0].submit(); return false">Let's go!</a>
+</form> -->
+  <form method="post">
+ {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.help_text %}
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+   <button type="submit" class= "button alt">Search By User</button>
+ </form>
+</div>
+<h1>{{tag}}</h1>
+
+{% for vid in videos %}
+    <iframe class = "videobox" width="420" height="345" src={{vid}}></iframe>
+   {% for title in videotitles %}
+   {% if forloop.counter == forloop.parentloop.counter %}
+      {% for user in users %}
+      {% if forloop.counter == forloop.parentloop.counter %}
+        <h4>{{ title }} - {{user}}</h4>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    {%endfor%}
+    {% endfor %}
+</div>
+</div>

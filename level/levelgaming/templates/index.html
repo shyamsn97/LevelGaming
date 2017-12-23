@@ -1,29 +1,33 @@
-  {% load static %}
- {% include "header.html" %}
-<style >
-body{
-	background-color: black;
-}
-	#three {
-		background-color: gray;
-		width: 100%;
-		display: inline-block;
-	}
-	#news {
-		list-style-type: none;
-		font-size: 0.8em;
-	}
+{% extends "base.html" %}
+{% load static %}
 
-</style>
+{% block content %}
+<div class="container-fluid" style="background-color: gray;">
+	{% csrf_token %}
+	{% if user.is_authenticated %}
+	<h1>Welcome, {{user.username}}</h1>
 
-<div id="three" class="wrapper style1">
-<ul id="news">
-<li><h1>Top News Stories</h1></li>
-{% for choices in newsstories %}
-<!--  <a href="{{choices.url}}">{{choices.url}}</a>
- <li>{{choices.title}}</li>
-  <li>{{choices.date}}</li> -->
-<br>
-{% endfor %}
-</ul>
+	{% else %} 
+	<h1>Welcome to Level Gaming</h1>
+	{% endif %}
+
+    <div class="col-sm-6">
+    	<h2>Trending E-Sports News</h2>
+
+    	<ul>
+	    	{% for choices in newsstories %}
+	    	<a href="{{choices.url}}" class="">{{choices.url}}</a>
+	    	<li>{{choices.title}}</li>
+	    	<li>{{choices.date}}</li>
+	    	<br>
+	    	{% endfor %}
+	    </ul>
+    </div>
+
+    <div class="col-sm-6">
+    	<h2>Recent Videos</h2>
+
+    	Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto.    
+    </div>
 </div>
+{% endblock %}

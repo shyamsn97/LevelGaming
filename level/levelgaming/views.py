@@ -14,7 +14,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 # from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-import datetime
+import datetime, pytz
 import levelgaming.esports_news_test as es        
 import lxml
 import urllib.request
@@ -87,8 +87,7 @@ def login_view(request):
     return render(request, 'login.html', {'form': form })
 
 def logout_view(request):
-    if request.user.is_authenticated():
-        logout(request)
+    logout(request)
     return redirect("home")
 
 def signup(request):

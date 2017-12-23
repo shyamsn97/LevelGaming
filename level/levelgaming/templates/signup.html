@@ -1,4 +1,4 @@
-{% include "header.html" %}
+{% include "base.html" %}
 {% block content %}
 <style>
   #maincont {
@@ -7,26 +7,29 @@
     height: 15em;
   }
 </style>
-<div id="maincont" class="wrapper style1">
-  <form method="post">
-  {% if user.is_authenticated %}
-  <h2>Log out before creating a new account</h2>
-  {% else %}
-  <h2>Sign up</h2>
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    {% endfor %}
-    <button type="submit" class= "button alt">Sign up</button>
-  {% endif %}
-  </form>
+
+<div class="container-fluid" style="margin-top: 20px">
+  <div class="container">
+    <form method="post">
+    {% if user.is_authenticated %}
+    <h1>Log out before creating a new account</h1>
+    {% else %}
+    <h1>Sign up</h1>
+      {% csrf_token %}
+      {% for field in form %}
+        <h3>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          {% if field.help_text %}
+          {% endif %}
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </h3>
+      {% endfor %}
+      <button type="submit" class= "btn btn-primary btn-lg">Sign up</button>
+    {% endif %}
+    </form>
+  </div>
 </div>
 {% endblock %}

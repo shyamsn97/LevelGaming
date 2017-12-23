@@ -1,5 +1,7 @@
+{% extends "base.html" %}
 {% load static %}
-{% include "header.html" %}
+
+{% block content %}
 <style >
 body{
 	background-color: gray;
@@ -46,11 +48,11 @@ body{
 }
 
 .close:hover,
+.close:focus,
 .followingclose:hover,
 .followingclose:focus,
 .videoclose:hover,
-.videoclose:focus,
-.close:focus {
+.videoclose:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
@@ -62,40 +64,37 @@ body{
 </style>
 
 <div id="three" class="wrapper style1">
-<h1><a id = "username" >{{ user.username }} </a></h1>
-<a href="{% url 'addvideo' %}">Add Video</a>
-<button id="followers">Followers</button>
-<!-- Trigger/Open The Modal -->
-<!-- The Modal -->
-<div id="followermodal" class="modal">
-  <!-- Modal content -->
-  <div class="follower-modal-content">
-    <span class="close">&times;</span>
-    {% for foll in followers %}
-    <h1><a>{{foll}}</a></h1>
-    <br>
-    {%endfor%}
+    <h1><a id = "username" >{{ user.username }} </a></h1>
+    <a href="{% url 'addvideo' %}">Add Video</a>
 
-  </div>
-<br>
-<br>
-<br>
-</div>
-<button id="following">Following</button>
-<!-- Trigger/Open The Modal -->
-<!-- The Modal -->
-<div id="followingmodal" class="modal">
-  <!-- Modal content -->
-  <div class="following-modal-content">
-    <span class="followingclose">&times;</span>
-    {% for folw in following %}
-    <h1><a>{{folw}}</a></h1>
-    <br>
-    {%endfor%}
-  </div>
-</div>
+    <button id="followers">Followers</button>
+    <!-- Trigger/Open The Modal -->
+    <!-- The Modal -->
+    <div id="followermodal" class="modal">
+      <!-- Modal content -->
+        <div class="follower-modal-content">
+            <span class="close">&times;</span>
+            {% for foll in followers %}
+            <h1><a>{{foll}}</a></h1>
+            <br>
+            {%endfor%}
+        </div>
+        <br>
+    </div>
 
-
+    <button id="following">Following</button>
+    <!-- Trigger/Open The Modal -->
+    <!-- The Modal -->
+    <div id="followingmodal" class="modal">
+      <!-- Modal content -->
+        <div class="following-modal-content">
+            <span class="followingclose">&times;</span>
+            {% for folw in following %}
+            <h1><a>{{folw}}</a></h1>
+            <br>
+            {%endfor%}
+        </div>
+    </div>
 </div>
 
 <div id="videobox">
@@ -173,3 +172,5 @@ window.onclick = function(event) {
     }
 }
 </script>
+
+{% endblock %}

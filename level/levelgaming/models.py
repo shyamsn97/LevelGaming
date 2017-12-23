@@ -4,7 +4,8 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
-import datetime
+import datetime, pytz
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -28,4 +29,4 @@ class Video(models.Model):
     username = models.TextField(max_length= 60000000,default="")
     description = models.TextField(max_length= 60000000,default="")
     title = models.TextField(max_length= 60000000,default="")
-    date = models.DateTimeField(default= datetime.datetime.now())
+    date = models.DateTimeField(default=timezone.now)
