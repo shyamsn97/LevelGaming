@@ -1,7 +1,7 @@
 
 from django import forms
 from django.forms import ModelForm
-from .models import Video
+from .models import Video, Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
@@ -44,3 +44,7 @@ class VideoForm(ModelForm):
 
 class VideoSearch(forms.Form):
     search = forms.CharField(max_length=255, required=True)
+
+class ProfilePicForm(forms.Form):
+    """docstring for ProfilePicForm"""
+    avatar     = forms.ImageField(label="avatar")

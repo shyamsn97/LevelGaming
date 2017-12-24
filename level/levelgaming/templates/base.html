@@ -8,6 +8,23 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <title>{% block title %}Level Gaming{% endblock %}</title>
 </head>
+
+<style type="text/css">
+.navbar-brand>img {
+   max-height: 100%;
+   height: 100%;
+   width: auto;
+   margin: 0 auto;
+
+
+   /* probably not needed anymore, but doesn't hurt */
+   -o-object-fit: contain;
+   object-fit: contain; 
+
+}
+</style>
+
+{% load static %}
 <body style="background-color:grey;">
 {% block navbar %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -19,12 +36,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="{% url 'home' %}">Level Gaming</a>
+
+      <div class="brand-left" style="display: flex; justify-content: left; position: absolute; width: 100%; left: 10px; top: 0;">
+        <a class="navbar-brand" href="{% url 'home' %}" style="display: flex; align-items: center;"><img style="margin-right: 10px; padding: 0;" src="{% static 'level-logo-black.png' %}" alt="Level Gaming">Level Gaming</a>
+      </div>
+      <!-- <a class="navbar-brand" href="{% url 'home' %}" style="margin-left: 10px;">Level Gaming</a> -->
     </div>
 
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <form class="navbar-form navbar-left" action="">
+        <!-- <form class="navbar-form navbar-left" action=""> -->
           <!-- <div class="input-group">
             <input type="text" class="form-control" placeholder="Search">
             <div class="input-group-btn">
@@ -33,7 +54,7 @@
               </button>
             </div>
           </div> -->
-        </form>
+        <!-- </form> -->
         <li><a href="{% url 'videos' %}">Videos</a></li>
         <li><a href="{% url 'usersearch' %}">Search for Users</a></li>
 

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style >
+body{
+	background-color: black;
+}
+	#three {
+		background-color: gray;
+		width: 100%;
+		display: inline-block;
+	}
+	#news {
+		list-style-type: none;
+		font-size: 0.8em;
+	}
+
+</style>
+
+<div id="three" class="wrapper style1">
+  <form method="post">
+  <h2>Add Profile Picture</h2>
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.help_text %}
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    <button type="submit" class= "button alt">Submit</button>
+  </form>
+</div>
+
+
+
+{% endblock %}

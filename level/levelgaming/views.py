@@ -6,7 +6,7 @@ from django.http import JsonResponse
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .forms import SignUpForm, LoginForm, VideoForm, VideoSearch
+from .forms import SignUpForm, LoginForm, VideoForm, VideoSearch, ProfilePicForm
 from .models import Video
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -19,6 +19,8 @@ import levelgaming.esports_news_test as es
 import lxml
 import urllib.request
 from lxml import etree
+from PIL import Image
+
 
 
 # Create your views here.
@@ -86,13 +88,15 @@ def usersearch(request):
 
 class ProfileView(TemplateView):
     def get(self, request, **kwargs):
-        followers = request.user.profile.followers
-        followers = (json.loads(followers))
-        followers = followers["followers"]
-        following = request.user.profile.following
-        following = (json.loads(following))
-        following = following["following"]
-        videolist = list(Video.objects.values_list('link',flat=True).filter(username=request.user.username))
+        # profile_pic = request.user.profile.profile_pic
+        # profile_pic = (json.loads(followers))
+        followers   = request.user.profile.followers
+        followers   = (json.loads(followers))
+        followers   = followers["followers"]
+        following   = request.user.profile.following
+        following   = (json.loads(following))
+        following   = following["following"]
+        videolist   = list(Video.objects.values_list('link',flat=True).filter(username=request.user.username))
         videotitles = list(Video.objects.values_list('title',flat=True).filter(username=request.user.username))
         # videofull = list(zip(videolist, videotitles))
         # print(videofull)
@@ -143,22 +147,33 @@ def linkprofile(request, name):
 def addvideo(request):
     form = VideoForm(request.POST or None)
     if request.POST and form.is_valid():
-        saveform = form.save(commit=False)
-        banner = form.cleaned_data.get('bannerurl')
-        youtube = etree.HTML(urllib.request.urlopen(banner).read()) 
-        video_title = youtube.xpath("//span[@id='eow-title']/@title")
-        banner = banner.replace("watch?v=","embed/")
-        saveform.link = banner
-        saveform.username = request.user.username
-        saveform.title = video_title[0]
+        saveform            = form.save(commit=False)
+        banner              = form.cleaned_data.get('bannerurl')
+        youtube             = etree.HTML(urllib.request.urlopen(banner).read()) 
+        video_title         = youtube.xpath("//span[@id='eow-title']/@title")
+        banner              = banner.replace("watch?v=","embed/")
+        saveform.link       = banner
+        saveform.username   = request.user.username
+        saveform.title      = video_title[0]
         saveform.save()
         return redirect("profile")
     return render(request, 'addvideo.html', {'form': form})
 
+def addprofilepic(request):
+    form = ProfilePicForm(request.POST, request.FILES)
+    if request.POST and form.is_valid():
+        user = request.user
+        avatar = form.cleaned_data['avatar']
+        profile = user.get_profile()
+        profile.avatar = avatar
+        profile.save()
+    return render(request, 'addprofilepic.html', {'form': form})
+
+
 def login_view(request):
     form = LoginForm(request.POST or None)
     if request.POST and form.is_valid():
-        user = form.login(request)
+        user    = form.login(request)
         if user:
             login(request, user)
             return redirect('home')# Redirect to a success page.
@@ -173,16 +188,16 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            saveform = form.save(commit=False)
+            saveform          = form.save(commit=False)
             saveform.username = form.cleaned_data.get('username')
             saveform.save()
-            user = User.objects.get(username=form.cleaned_data.get('username'))
-            dic = {}
+            user             = User.objects.get(username=form.cleaned_data.get('username'))
+            dic              = {}
             dic["followers"] = []
-            followingdic = {}
-            followingdic["following"] = []
-            user.profile.followers = json.dumps(dic)
-            user.profile.following = json.dumps(followingdic)
+            followingdic     = {}
+            followingdic["following"]   = []
+            user.profile.followers      = json.dumps(dic)
+            user.profile.following      = json.dumps(followingdic)
             login(request, user)
             return redirect("home")
     else:
