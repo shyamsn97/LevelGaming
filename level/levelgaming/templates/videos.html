@@ -6,11 +6,11 @@
   }
 </style>
 {% block content %}
-<div id = "mainstuff" class="container">
+<div id = "mainstuff" class="container" style="margin-top: 5%;">
   <form method="post">
  {% csrf_token %}
     {% for field in form %}
-      <p>
+      <h4>
         {{ field.label_tag }}<br>
         {{ field }}
         {% if field.help_text %}
@@ -18,9 +18,9 @@
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
-      </p>
+      </h4>
     {% endfor %}
-   <button type="submit" class= "button alt">Search By User</button>
+   <button type="button" class= "btn btn-md">Search By User</button>
  </form>
 <h1>{{tag}}</h1>
   {% for vid in videos %}

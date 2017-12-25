@@ -19,10 +19,10 @@ class Profile(models.Model):
     followers   = models.TextField(max_length=5000000000000, blank=True)
     avatar = models.ImageField(upload_to="avatars/", default="avatars/default_profile_pic.png")
 
-    def save(self, *args, **kwargs):
-        super(Profile, self).save(*args, **kwargs)
-        if self.profile:
-            imglib.resize_image(profile)
+    # def save(self, *args, **kwargs):
+    #     super(Profile, self).save(*args, **kwargs)
+    #     if self.profile:
+    #         imglib.resize_image(profile)
 
 
 @receiver(post_save, sender=User)
