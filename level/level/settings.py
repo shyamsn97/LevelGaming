@@ -25,7 +25,7 @@ SECRET_KEY = 'kf73mm-%lgscy5g5n)^(h-53$7=o(&b%=bop(e-*t!#l+2=7wc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ["35.203.185.252"]
+ALLOWED_HOSTS = ["35.203.185.252"]
 
 
 # Application definition
