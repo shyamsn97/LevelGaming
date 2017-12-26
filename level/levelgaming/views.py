@@ -6,7 +6,7 @@ from django.http import JsonResponse
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .forms import SignUpForm, LoginForm, VideoForm, VideoSearch, ProfilePicForm
+from .forms import SignUpForm, LoginForm, VideoForm, VideoSearch
 from .models import Video
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -159,15 +159,15 @@ def addvideo(request):
         return redirect("profile")
     return render(request, 'addvideo.html', {'form': form})
 
-def addprofilepic(request):
-    form = ProfilePicForm(request.POST, request.FILES)
-    if request.POST and form.is_valid():
-        user = request.user
-        avatar = form.cleaned_data['avatar']
-        profile = user.get_profile()
-        profile.avatar = avatar
-        profile.save()
-    return render(request, 'addprofilepic.html', {'form': form})
+#def addprofilepic(request):
+#    form = ProfilePicForm(request.POST, request.FILES)
+#    if request.POST and form.is_valid():
+#        user = request.user
+#        avatar = form.cleaned_data['avatar']
+#        profile = user.get_profile()
+#        profile.avatar = avatar
+#        profile.save()
+#    return render(request, 'addprofilepic.html', {'form': form})
 
 
 def login_view(request):

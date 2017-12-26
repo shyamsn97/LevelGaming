@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'kf73mm-%lgscy5g5n)^(h-53$7=o(&b%=bop(e-*t!#l+2=7wc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["35.203.185.252"]
+ALLOWED_HOSTS = ["35.203.185.252","www.levelesport.com","levelesport.com"]
 
 
 # Application definition
@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'newlevel',
-        'USER': 'kaimiddlebrook',
-        'PASSWORD': '0909',
+        'USER': 'postgres',
+        'PASSWORD': 'ilovehalo',
         'HOST': 'localhost',
         'PORT': '',
     }

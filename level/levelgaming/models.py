@@ -17,7 +17,7 @@ class Profile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE)
     following   = models.TextField(max_length=5000000000000, blank=True)
     followers   = models.TextField(max_length=5000000000000, blank=True)
-    avatar = models.ImageField(upload_to="avatars/", default="avatars/default_profile_pic.png")
+#    avatar = models.ImageField(upload_to="avatars/", default="avatars/default_profile_pic.png")
 
     # def save(self, *args, **kwargs):
     #     super(Profile, self).save(*args, **kwargs)

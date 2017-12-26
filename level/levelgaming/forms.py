@@ -45,6 +45,6 @@ class VideoForm(ModelForm):
 class VideoSearch(forms.Form):
     search = forms.CharField(max_length=255, required=True)
 
-class ProfilePicForm(forms.Form):
-    """docstring for ProfilePicForm"""
-    avatar     = forms.ImageField(label="avatar")
+#class ProfilePicForm(forms.Form):
+#    """docstring for ProfilePicForm"""
+#    avatar     = forms.ImageField(label="avatar")
