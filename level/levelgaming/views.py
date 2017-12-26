@@ -12,7 +12,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-# from .tokens import account_activation_token
+from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 import datetime
 import levelgaming.esports_news_test as es        
@@ -34,6 +34,11 @@ class HomePageView(TemplateView):
         # jews = list(User.objects.values('username'))
         # jews = [j["username"] for j in jews]
         return render(request, 'index.html', {"newsstories":newsstories,"users":videousers,"videos":videolist,"videotitles":videotitles})
+
+class ActivateStuff(TemplateView):
+    def get(self, request, **kwargs):
+        return render(request, 'activatestuff.html', context=None)
+
 
 def videos_view(request):
     # def get(self, request, **kwargs):
@@ -174,7 +179,7 @@ def login_view(request):
     form = LoginForm(request.POST or None)
     if request.POST and form.is_valid():
         user    = form.login(request)
-        if user:
+        if user and user.is_active == True:
             login(request, user)
             return redirect('home')# Redirect to a success page.
     return render(request, 'login.html', {'form': form })
@@ -184,12 +189,30 @@ def logout_view(request):
         logout(request)
     return redirect("home")
 
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('profile')
+        #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')
+
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             saveform          = form.save(commit=False)
             saveform.username = form.cleaned_data.get('username')
+            #saveform.is_active = False
             saveform.save()
             user             = User.objects.get(username=form.cleaned_data.get('username'))
             dic              = {}
@@ -198,6 +221,18 @@ def signup(request):
             followingdic["following"]   = []
             user.profile.followers      = json.dumps(dic)
             user.profile.following      = json.dumps(followingdic)
+            #current_site = get_current_site(request)
+            #print(current_site.domain)
+            #message = render_to_string('acc_active_email.html', {
+            #    'user':user,
+            #    'domain':current_site.domain,
+            #    'uid': urlsafe_base64_encode(force_bytes(user.id)),
+            #    'token': account_activation_token.make_token(user),
+            #})
+            #mail_subject = 'Activate your account'
+            #to_email = form.cleaned_data.get('email')
+            #email = EmailMessage(mail_subject, message, to=[to_email])
+            #email.send()
             login(request, user)
             return redirect("home")
     else:
