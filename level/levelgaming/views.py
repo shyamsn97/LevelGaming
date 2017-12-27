@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
+from django.contrib import messages
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -20,6 +21,8 @@ import lxml
 import urllib.request
 from lxml import etree
 from PIL import Image
+from django import forms
+
 
 
 
@@ -108,8 +111,11 @@ class ProfileView(TemplateView):
         return render(request, 'profile.html',{"followers":followers,"following":following,"videos":videolist,"videotitles":videotitles})
 
 def delete(request, vid):
-    vid =  vid.replace("https:/", "https://")
-    query = Video.objects.get(link=vid)
+    if "https://" in vid:
+        vid = vid
+    else:
+        vid = vid.replace("https:/","https://")
+    query = Video.objects.get(link__contains=vid)
     query.delete()
     return redirect("profile")
 
@@ -152,18 +158,24 @@ def linkprofile(request, name):
 
 def addvideo(request):
     form = VideoForm(request.POST or None)
+    message = ""
     if request.POST and form.is_valid():
         saveform            = form.save(commit=False)
+        message = ""
         banner              = form.cleaned_data.get('bannerurl')
         youtube             = etree.HTML(urllib.request.urlopen(banner).read()) 
         video_title         = youtube.xpath("//span[@id='eow-title']/@title")
         banner              = banner.replace("watch?v=","embed/")
-        saveform.link       = banner
-        saveform.username   = request.user.username
-        saveform.title      = video_title[0]
-        saveform.save()
+        if Video.objects.filter(link=banner).exists():
+            message = "Video already exists"
+            return render(request, 'addvideo.html', {'form': VideoForm(),'message':message})
+        else:
+            saveform.link       = banner
+            saveform.username   = request.user.username
+            saveform.title      = video_title[0]
+            saveform.save()
         return redirect("profile")
-    return render(request, 'addvideo.html', {'form': form})
+    return render(request, 'addvideo.html', {'form': form,'message':message})
 
 #def addprofilepic(request):
 #    form = ProfilePicForm(request.POST, request.FILES)

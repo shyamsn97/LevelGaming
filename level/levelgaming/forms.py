@@ -38,6 +38,7 @@ class LoginForm(forms.Form):
 
 class VideoForm(ModelForm):
     bannerurl = forms.URLField(max_length=250,label="Link")
+
     class Meta:
         model = Video
         fields = ['bannerurl']

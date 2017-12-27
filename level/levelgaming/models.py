@@ -33,7 +33,7 @@ def update_user_profile(sender, instance, created, **kwargs):
 
 
 class Video(models.Model):
-    link = models.TextField(max_length=5000000000000)
+    link = models.TextField(max_length=5000000000000,unique=True)
     username = models.TextField(max_length= 60000000,default="")
     description = models.TextField(max_length= 60000000,default="")
     title = models.TextField(max_length= 60000000,default="")
