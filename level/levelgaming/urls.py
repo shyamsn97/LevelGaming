@@ -1,7 +1,7 @@
 from django.conf.urls import include
 from django.conf.urls import url
 from django.contrib.auth import views as auth_view
-from django.contrib.auth.views import logout, login
+#from django.contrib.auth.views import logout, login
 from levelgaming import views as levelgaming_views
 
 

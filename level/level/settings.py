@@ -31,13 +31,13 @@ ALLOWED_HOSTS = ["35.203.185.252","www.levelesport.com","levelesport.com"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'levelgaming',
+    'django.contrib.auth',
+#    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [

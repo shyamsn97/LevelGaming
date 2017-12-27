@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid" style="margin-top: 20px">
+  <div class="container">
+    <form method="post">
+    {% if user.is_authenticated %}
+      <h2>Logged In!</h2>
+    {% else %}
+      <h2>Login</h2>
+        {% csrf_token %}
+        {% for field in form %}
+          <h3>
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+              <small style="color: grey">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+              <p style="color: red">{{ error }}</p>
+            {% endfor %}
+          </h3>
+        {% endfor %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary btn-lg pull-right">Log in</button>
+          </div>
+          
+          <div>
+            <h3><a href="{% url 'signup' %}">Don't have an account? Click here</a></h3>
+          </div>
+        </div>
+    {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}
+
