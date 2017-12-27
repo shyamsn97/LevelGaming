@@ -108,6 +108,7 @@ class ProfileView(TemplateView):
         return render(request, 'profile.html',{"followers":followers,"following":following,"videos":videolist,"videotitles":videotitles})
 
 def delete(request, vid):
+    vid =  vid.replace("https:/", "https://")
     query = Video.objects.get(link=vid)
     query.delete()
     return redirect("profile")
